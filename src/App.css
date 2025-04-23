@@ -1,0 +1,6 @@
+@import url('./components/Components.css');
+
+#root {
+  margin: 0;
+  min-width: 100%;
+}
