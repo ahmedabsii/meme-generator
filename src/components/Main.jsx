@@ -1,5 +1,5 @@
-import { useState, useEffect } from "react";
-
+import { useState, useEffect, useRef } from "react";
+import html2cavas from "html2canvas";
 const Main = () => {
   const [meme, setMeme] = useState({
     topText: "",
@@ -31,6 +31,19 @@ const Main = () => {
     }));
   }
 
+  const memeRef = useRef();
+  async function saveMeme() {
+    const canvas = await html2cavas(memeRef.current, {
+      useCORS: true,
+      allowTaint: true,
+    });
+    const dataUrl = canvas.toDataURL("image/png");
+    const link = document.createElement("a");
+    link.href = dataUrl;
+    link.download = "meme.png"
+    link.click();
+  }
+
   return (
     <main className="main">
       <div className="form">
@@ -55,9 +68,10 @@ const Main = () => {
           />
         </label>
         <button onClick={changeMemeImg}>Get a new meme image🖼️</button>
+        <button onClick={saveMeme}>Save Meme 💾</button>
       </div>
 
-      <div className="meme">
+      <div className="meme" ref={memeRef}>
         <img src={meme.imageUrl} alt="Meme" />
         <span className="top">{meme.topText}</span>
         <span className="bottom">{meme.bottomText}</span>
